@@ -1,13 +1,14 @@
-package com.example.demo;
+package com.rsoi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-public class DemoApplication {
+public class App implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(App.class, args);
 	}
 
 }
