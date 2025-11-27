@@ -3,30 +3,33 @@ package com.rsoi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "\"User\"")
+@Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String login;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(length = 255, nullable = false)
-    private String fullName;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column(columnDefinition = "TEXT")
-    private String address;
+    @Column(name = "password")
+    private String password;
 
-    @Column(length = 20, nullable = false)
-    private String phone;
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "birthdate")
+    private LocalDate birthdate;
+
+    @Column(name = "email")
+    private String email;
 }
-

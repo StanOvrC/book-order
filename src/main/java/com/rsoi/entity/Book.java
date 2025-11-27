@@ -3,53 +3,45 @@ package com.rsoi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Entity
+@Table(name = "books")
 public class Book {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(length = 255, nullable = false)
+    @Column(name = "title")
     private String title;
 
-    @Column(length = 13, nullable = false, unique = true)
+    @Column(name = "author")
+    private String author;
+
+    @Column(name = "isbn")
     private String isbn;
 
-    @Column(nullable = false)
-    private Double price;
+    @Column(name = "page_count")
+    private Integer pageCount;
 
-    @Column(name = "publication_year", nullable = false)
-    private Integer publicationYear;
+    @Column(name = "price")
+    private BigDecimal price;
 
-    @Column(columnDefinition = "TEXT")
-    private String annotation;
+    @Column(name = "publication_year")
+    private LocalDate publicationYear;
 
-    @Column(nullable = false)
-    private Double weight;
-
-    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
-    private Warehouse warehouse;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "BookGenre",
-            joinColumns = @JoinColumn(name = "bookId"),
-            inverseJoinColumns = @JoinColumn(name = "genreId")
+            name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private List<Genre> genres;
+    private Set<Genre> genres;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Authorship",
-            joinColumns = @JoinColumn(name = "bookId"),
-            inverseJoinColumns = @JoinColumn(name = "authorId")
-    )
-    private List<Author> authors;
-
-    // getters/setters
+    @Column(name = "stock")
+    private Integer stock;
 }
-

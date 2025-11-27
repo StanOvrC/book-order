@@ -3,26 +3,28 @@ package com.rsoi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
+@Table(name = "order_item")
 public class OrderItem {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "orderId")
-    private Order order;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "bookId")
+    @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
-    @Column(nullable = false)
+    @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(nullable = false)
-    private Double priceAtOrder;
-}
+    @Column(name = "price")
+    private BigDecimal price;
 
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "order_id")
+    private Order order;
+}

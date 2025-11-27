@@ -3,33 +3,29 @@ package com.rsoi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "\"Order\"")
+@Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "userId")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private LocalDate creationDate = LocalDate.now();
+    @Column(name = "total_cost")
+    private BigDecimal totalCost;
 
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private OrderStatus status = OrderStatus.PENDING;
-
-    @Column(nullable = false)
-    private Double totalCost;
+    private Status status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 }
-

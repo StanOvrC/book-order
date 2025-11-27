@@ -2,21 +2,23 @@ package com.rsoi.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@Table(name = "genre")
+@EqualsAndHashCode(exclude = "books")
 public class Genre {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private Long id;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "genres")
-    private List<Book> books;
+    private Set<Book> books;
 }
-
