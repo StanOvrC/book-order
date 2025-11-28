@@ -7,6 +7,7 @@ import com.rsoi.service.BookService;
 import com.rsoi.service.GenreService;
 import com.rsoi.service.dto.book.BookCreateUpdateDto;
 import com.rsoi.service.dto.book.BookDto;
+import com.rsoi.service.dto.book.GenreDto;
 import com.rsoi.service.exception.InsufficientStockException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<String> findAllGenreNames() {
         return genreService.findAll().stream()
-                .map(Genre::getName)
+                .map(GenreDto::getName)
                 .collect(Collectors.toList());
     }
 
