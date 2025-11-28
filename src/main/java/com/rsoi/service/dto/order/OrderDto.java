@@ -14,4 +14,5 @@ public class OrderDto {
     private BigDecimal totalCost;
     private Status status;
     private List<OrderItemDto> items;
+    private String address;
 }

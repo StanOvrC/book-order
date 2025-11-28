@@ -22,11 +22,13 @@ CREATE TABLE books (
     id BIGSERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     author VARCHAR(255) NOT NULL,
-    isbn VARCHAR(13) UNIQUE NOT NULL,
+    isbn VARCHAR(20) UNIQUE NOT NULL,
     page_count INTEGER CHECK (page_count > 0) NOT NULL,
     price NUMERIC(10, 2) CHECK (price >= 0) NOT NULL,
     publication_year DATE,
     stock INTEGER DEFAULT 0 CHECK (stock >= 0) NOT NULL
+    image_path VARCHAR(512),
+    description TEXT
 );
 
 CREATE INDEX idx_book_isbn ON books(isbn);
@@ -46,6 +48,7 @@ CREATE TABLE orders (
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     total_cost NUMERIC(10, 2) CHECK (total_cost >= 0),
     status order_status NOT NULL DEFAULT 'IN_CART',
+    address VARCHAR(512),
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

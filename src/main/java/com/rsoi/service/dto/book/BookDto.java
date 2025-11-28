@@ -17,4 +17,6 @@ public class BookDto {
     private LocalDate publicationYear;
     private Integer stock;
     private Set<GenreDto> genres;
+    private String imagePath;
+    private String description;
 }
