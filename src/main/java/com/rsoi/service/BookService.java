@@ -24,4 +24,8 @@ public interface BookService {
     boolean checkStock(Long bookId, int quantity);
 
     void deductStock(Long bookId, int quantity);
+
+    Page<BookDto> searchBooks(String query, Pageable pageable);
+
+    Page<BookDto> findByGenre(Long genreId, Pageable pageable);
 }

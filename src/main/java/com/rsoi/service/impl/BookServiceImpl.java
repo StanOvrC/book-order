@@ -105,4 +105,26 @@ public class BookServiceImpl implements BookService {
         book.setStock(book.getStock() - quantity);
         bookRepository.save(book);
     }
+
+    @Override
+    public Page<BookDto> searchBooks(String query, Pageable pageable) {
+        if (query == null || (query = query.trim()).isEmpty()) {
+            return bookRepository.findAll(pageable)
+                    .map(book -> modelMapper.map(book, BookDto.class));
+        }
+
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
+                        query, query, pageable)
+                .map(book -> modelMapper.map(book, BookDto.class));
+    }
+
+    @Override
+    public Page<BookDto> findByGenre(Long genreId, Pageable pageable) {
+        if (genreId == null) {
+            throw new IllegalArgumentException("Genre ID cannot be null");
+        }
+
+        return bookRepository.findByGenres_Id(genreId, pageable)
+                .map(book -> modelMapper.map(book, BookDto.class));
+    }
 }
