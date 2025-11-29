@@ -44,4 +44,10 @@ public class Book {
 
     @Column(name = "stock")
     private Integer stock;
+
+    @Column(name = "image_path")
+    private String imagePath;
+
+    @Column(name = "description")
+    private String description;
 }
