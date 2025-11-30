@@ -25,6 +25,7 @@
     </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/jsp/navbar.jsp" %>
 
 <div class="container">
 
@@ -62,6 +63,7 @@
                 </c:if>
 
                 <form action="/cart/add" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                     <input type="hidden" name="bookId" value="${book.id}">
                     <input type="hidden" name="quantity" value="1">
                     <button class="btn">Добавить в корзину</button>
