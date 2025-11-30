@@ -1,24 +1,23 @@
 package com.rsoi.service;
 
-import com.rsoi.entity.Order;
-import com.rsoi.entity.User;
 import com.rsoi.service.dto.order.CartActionDto;
 import com.rsoi.service.dto.order.OrderDto;
+import com.rsoi.service.dto.user.UserDto;
 
 import java.util.List;
 
 public interface OrderService {
-    Order getOrCreateCart(User user);
+    OrderDto getOrCreateCart(UserDto user);
 
-    OrderDto addItemToCart(User user, CartActionDto cartActionDto);
+    OrderDto addItemToCart(UserDto user, CartActionDto cartActionDto);
 
-    OrderDto removeItemFromCart(User user, Long orderItemId);
+    OrderDto decreaseItemQuantity(UserDto user, CartActionDto cartActionDto);
 
-    OrderDto clearCart(User user);
+    OrderDto removeItemFromCart(UserDto user, Long orderItemId);
 
-    Order calculateTotal(Order order);
+    OrderDto clearCart(UserDto user);
 
-    OrderDto checkout(User user);
+    OrderDto checkout(UserDto user, String address);
 
-    List<OrderDto> getUserOrderHistory(User user);
+    List<OrderDto> getUserOrderHistory(UserDto user);
 }
