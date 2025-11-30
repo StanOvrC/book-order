@@ -8,15 +8,12 @@ CREATE TABLE users (
     email VARCHAR(128) UNIQUE NOT NULL
 );
 
-
 CREATE INDEX idx_user_email ON users(email);
-
 
 CREATE TABLE genre (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL
 );
-
 
 CREATE TABLE books (
     id BIGSERIAL PRIMARY KEY,
@@ -26,7 +23,7 @@ CREATE TABLE books (
     page_count INTEGER CHECK (page_count > 0) NOT NULL,
     price NUMERIC(10, 2) CHECK (price >= 0) NOT NULL,
     publication_year DATE,
-    stock INTEGER DEFAULT 0 CHECK (stock >= 0) NOT NULL
+    stock INTEGER DEFAULT 0 CHECK (stock >= 0) NOT NULL,
     image_path VARCHAR(512),
     description TEXT
 );
@@ -41,20 +38,16 @@ CREATE TABLE book_genre (
 
 DROP TYPE IF EXISTS order_status CASCADE;
 
-CREATE TYPE order_status AS ENUM ('IN_CART', 'PENDING', 'PAID', 'DELIVERED', 'CANCELED');
-
 CREATE TABLE orders (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     total_cost NUMERIC(10, 2) CHECK (total_cost >= 0),
-    status order_status NOT NULL DEFAULT 'IN_CART',
+    status VARCHAR(20) NOT NULL DEFAULT 'IN_CART',
     address VARCHAR(512),
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_order_user_status ON orders(user_id, status);
-
-
 
 CREATE TABLE order_item (
     id BIGSERIAL PRIMARY KEY,
