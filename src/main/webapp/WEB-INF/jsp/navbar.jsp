@@ -11,6 +11,11 @@
             <a href="/users/profile">Личный кабинет</a>
 
             <a href="/cart">Корзина</a>
+            <c:if test="${cartItemCount > 0}">
+                <span style="background: red; color: white; border-radius: 50%; padding: 2px 6px;">
+                    ${cartItemCount}
+                </span>
+            </c:if>
 
             <form action="/logout" method="post" style="display:inline;">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
