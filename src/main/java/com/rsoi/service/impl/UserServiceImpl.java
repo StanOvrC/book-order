@@ -6,6 +6,7 @@ import com.rsoi.repository.UserRepository;
 import com.rsoi.service.UserService;
 import com.rsoi.service.dto.user.UserDto;
 import com.rsoi.service.dto.user.UserRegisterDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,26 +40,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public UserDto findById(Long id) {
+        return modelMapper.map(userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found")), UserDto.class);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserDto findByEmail(String email) {
+        return modelMapper.map(userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found")), UserDto.class);
     }
 
     @Override
-    public User getCurrentUser() {
+    public UserDto getCurrentUser() {
         String email = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
 
-        return findByEmail(email)
-                .orElseThrow(() -> new SecurityException("Authenticated user not found in database."));
+        return findByEmail(email);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
         return org.springframework.security.core.userdetails.User.builder()
