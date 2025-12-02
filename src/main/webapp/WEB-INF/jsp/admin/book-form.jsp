@@ -12,82 +12,79 @@
 
 <%@ include file="/WEB-INF/jsp/navbar.jsp" %>
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">${isEdit ? 'Редактирование книги' : 'Добавление новой книги'}</h4>
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0">
+                        ${isEdit ? 'Редактирование книги' : 'Добавление новой книги'}
+                    </h4>
                 </div>
                 <div class="card-body">
 
-                    <form:form modelAttribute="book" method="post">
+                    <form:form modelAttribute="book" method="post" class="needs-validation">
 
-                        <!-- TITLE -->
                         <div class="mb-3">
-                            <label class="form-label">Название</label>
+                            <label class="form-label fw-bold">Название</label>
                             <form:input path="title" cssClass="form-control" required="true"/>
-                            <form:errors path="title" cssClass="text-danger"/>
+                            <form:errors path="title" cssClass="text-danger small"/>
                         </div>
 
-                        <!-- AUTHOR -->
                         <div class="mb-3">
-                            <label class="form-label">Автор</label>
+                            <label class="form-label fw-bold">Автор</label>
                             <form:input path="author" cssClass="form-control" required="true"/>
-                            <form:errors path="author" cssClass="text-danger"/>
+                            <form:errors path="author" cssClass="text-danger small"/>
                         </div>
 
-                        <!-- ISBN -->
                         <div class="mb-3">
-                            <label class="form-label">ISBN</label>
+                            <label class="form-label fw-bold">ISBN</label>
                             <form:input path="isbn" cssClass="form-control" required="true"/>
-                            <form:errors path="isbn" cssClass="text-danger"/>
+                            <form:errors path="isbn" cssClass="text-danger small"/>
                         </div>
 
                         <div class="row">
-                            <!-- PAGE COUNT -->
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Количество страниц</label>
+                                <label class="form-label fw-bold">Количество страниц</label>
                                 <form:input path="pageCount" type="number" cssClass="form-control" required="true"/>
-                                <form:errors path="pageCount" cssClass="text-danger"/>
+                                <form:errors path="pageCount" cssClass="text-danger small"/>
                             </div>
 
-                            <!-- PRICE -->
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Цена (BYN)</label>
+                                <label class="form-label fw-bold">Цена (BYN)</label>
                                 <form:input path="price" type="number" step="0.01" cssClass="form-control" required="true"/>
-                                <form:errors path="price" cssClass="text-danger"/>
+                                <form:errors path="price" cssClass="text-danger small"/>
                             </div>
                         </div>
 
-                        <!-- PUBLICATION YEAR -->
                         <div class="mb-3">
-                            <label class="form-label">Год публикации</label>
+                            <label class="form-label fw-bold">Год публикации</label>
                             <form:input path="publicationYear" type="date" cssClass="form-control"/>
-                            <form:errors path="publicationYear" cssClass="text-danger"/>
+                            <form:errors path="publicationYear" cssClass="text-danger small"/>
                         </div>
 
-                        <div class="row">
-                            <!-- STOCK -->
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label">Количество на складе</label>
-                                <form:input path="stock" type="number" cssClass="form-control" required="true"/>
-                                <form:errors path="stock" cssClass="text-danger"/>
-                            </div>
-                        </div>
-
-                        <!-- GENRES (MULTI SELECT) -->
                         <div class="mb-3">
-                            <label class="form-label">Жанры</label>
-                            <form:select path="genreIds" cssClass="form-select" multiple="true">
+                            <label class="form-label fw-bold">Количество на складе</label>
+                            <form:input path="stock" type="number" cssClass="form-control" required="true"/>
+                            <form:errors path="stock" cssClass="text-danger small"/>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Жанры</label>
+                            <form:select path="genreIds" cssClass="form-select" multiple="true" size="5">
                                 <form:options items="${genres}" itemValue="id" itemLabel="name"/>
                             </form:select>
-                            <form:errors path="genreIds" cssClass="text-danger"/>
+                            <div class="form-text">Удерживайте Ctrl (Cmd) для выбора нескольких жанров.</div>
+                            <form:errors path="genreIds" cssClass="text-danger small"/>
                         </div>
 
-                        <div class="d-flex justify-content-between">
-                            <a href="/books" class="btn btn-secondary">Отмена</a>
-                            <button type="submit" class="btn btn-success">Сохранить</button>
+                        <div class="d-flex justify-content-between pt-3 border-top">
+                            <a href="/books" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg"></i> Сохранить
+                            </button>
                         </div>
 
                     </form:form>
@@ -98,5 +95,6 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
