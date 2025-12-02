@@ -6,6 +6,7 @@ import com.rsoi.service.GenreService;
 import com.rsoi.service.OrderService;
 import com.rsoi.service.dto.book.BookCreateUpdateDto;
 import com.rsoi.service.dto.book.BookDto;
+import com.rsoi.service.dto.book.GenreDto;
 import com.rsoi.service.dto.order.OrderDto;
 import com.rsoi.service.dto.order.OrderSearchCriteria;
 import jakarta.validation.Valid;
@@ -70,13 +71,16 @@ public class AdminController {
         dto.setGenreIds(
                 book.getGenres()
                         .stream()
-                        .map(g -> g.getId())
+                        .map(GenreDto::getId)
                         .collect(Collectors.toSet())
         );
 
         model.addAttribute("book", dto);
         model.addAttribute("genres", genreService.findAll());
         model.addAttribute("isEdit", true);
+
+        model.addAttribute("currentImagePath", book.getImagePath());
+
         return "admin/book-form";
     }
 

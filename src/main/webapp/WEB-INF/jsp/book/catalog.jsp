@@ -6,14 +6,24 @@
     <title>Каталог книг</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        .book-card-img-wrapper {
+            height: 280px; /* Фиксированная высота области картинки */
+            background-color: #f8f9fa; /* Серый фон для пустых областей */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #eee;
+        }
         .book-img {
-            height: 250px;
-            object-fit: cover; /* Чтобы картинки не растягивались */
-            width: 100%;
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain; /* Картинка масштабируется, сохраняя пропорции */
+            width: auto; /* Переопределяем bootstrap width:100% */
         }
         .card:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: 0.3s;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -53,13 +63,21 @@
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         <c:forEach var="book" items="${books.content}">
             <div class="col">
-                <div class="card h-100">
-                    <a href="/books/${book.id}">
-                        <img src="/images/books/${book.id}.jpg"
-                             class="card-img-top book-img"
-                             alt="${book.title}"
-                             onerror="this.src='https://via.placeholder.com/150x220?text=No+Cover'">
+                <div class="card h-100 border-0 shadow-sm">
+                    <a href="/books/${book.id}" class="book-card-img-wrapper text-decoration-none">
+                        <c:choose>
+                            <c:when test="${not empty book.imagePath}">
+                                <img src="${book.imagePath}"
+                                     class="book-img"
+                                     alt="${book.title}"
+                                     onerror="this.src='https://via.placeholder.com/150x220?text=No+Image'">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="https://via.placeholder.com/150x220?text=No+Cover" class="book-img" alt="No Image">
+                            </c:otherwise>
+                        </c:choose>
                     </a>
+
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title text-truncate" title="${book.title}">${book.title}</h5>
                         <p class="card-text text-muted small mb-1">${book.author}</p>

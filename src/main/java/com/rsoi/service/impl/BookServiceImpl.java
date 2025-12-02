@@ -16,10 +16,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +34,30 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final GenreService genreService;
     private final ModelMapper modelMapper;
+    private static final String UPLOAD_DIR = "uploads";
+
+    private String saveImage(MultipartFile image) {
+        if (image == null || image.isEmpty()) {
+            return null;
+        }
+
+        try {
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+
+            Files.copy(image.getInputStream(), filePath);
+
+            return "/images/uploads/" + fileName;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Could not save image", e);
+        }
+    }
 
     @Override
     public Page<BookDto> findAll(Pageable pageable) {
@@ -53,6 +83,11 @@ public class BookServiceImpl implements BookService {
     public BookDto createBook(BookCreateUpdateDto createDto) {
         Book book = modelMapper.map(createDto, Book.class);
 
+        String imagePath = saveImage(createDto.getImage());
+        if (imagePath != null) {
+            book.setImagePath(imagePath);
+        }
+
         Set<Genre> genres = genreService.findByIds(createDto.getGenreIds());
         book.setGenres(genres);
 
@@ -73,6 +108,11 @@ public class BookServiceImpl implements BookService {
         book.setPrice(updateDto.getPrice());
         book.setPublicationYear(updateDto.getPublicationYear());
         book.setStock(updateDto.getStock());
+
+        if (updateDto.getImage() != null && !updateDto.getImage().isEmpty()) {
+            String newImagePath = saveImage(updateDto.getImage());
+            book.setImagePath(newImagePath);
+        }
 
         Set<Genre> newGenres = genreService.findByIds(updateDto.getGenreIds());
         book.getGenres().clear();

@@ -5,6 +5,21 @@
 <head>
     <title>${book.title}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .details-image-container {
+            height: 400px; /* Фиксированная высота для области изображения */
+            background-color: #f8f9fa;
+            border-radius: .3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .details-image {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -14,14 +29,18 @@
 
     <div class="card shadow p-4 border-0">
         <div class="row g-4">
-            <div class="col-md-4 text-center">
-                <div class="ratio ratio-3x4">
+            <div class="col-md-4">
+                <div class="details-image-container shadow-sm">
                      <c:choose>
                         <c:when test="${not empty book.imagePath}">
-                            <img src="${book.imagePath}" alt="${book.title}" class="img-fluid rounded object-fit-cover">
+                            <img src="${book.imagePath}"
+                                 alt="${book.title}"
+                                 class="details-image">
                         </c:when>
                         <c:otherwise>
-                            <img src="/images/no-image.png" class="img-fluid rounded" alt="No image" onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'">
+                            <img src="https://via.placeholder.com/300x450?text=No+Image"
+                                 class="details-image"
+                                 alt="No image">
                         </c:otherwise>
                     </c:choose>
                 </div>

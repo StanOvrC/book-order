@@ -23,7 +23,22 @@
                 </div>
                 <div class="card-body">
 
-                    <form:form modelAttribute="book" method="post" class="needs-validation">
+                    <form:form modelAttribute="book" method="post" enctype="multipart/form-data" class="needs-validation">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Обложка книги</label>
+                            <form:input path="image" type="file" cssClass="form-control" accept="image/*"/>
+                            <form:errors path="image" cssClass="text-danger small"/>
+
+                            <c:if test="${isEdit && not empty currentImagePath}">
+                                <div class="mt-2 p-2 border rounded bg-white">
+                                    <small class="text-muted d-block mb-1">Текущая обложка:</small>
+                                    <img src="${currentImagePath}" alt="Current Cover" style="height: 100px; width: auto; object-fit: contain;">
+                                </div>
+                            </c:if>
+                        </div>
+
+                        <hr>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Название</label>
