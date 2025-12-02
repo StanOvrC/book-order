@@ -12,10 +12,13 @@ import com.rsoi.service.BookService;
 import com.rsoi.service.OrderService;
 import com.rsoi.service.dto.order.CartActionDto;
 import com.rsoi.service.dto.order.OrderDto;
+import com.rsoi.service.dto.order.OrderSearchCriteria;
 import com.rsoi.service.dto.user.UserDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -184,5 +187,46 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderDto> getAll() {
+        return orderRepository.findAll().stream()
+                .map(e -> modelMapper.map(e, OrderDto.class))
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void updateOrderStatus(Long orderId, Status status) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("Order not found with id: " + orderId));
+
+        order.setStatus(status);
+        orderRepository.save(order);
+    }
+
+    @Override
+    public Page<OrderDto> searchOrders(OrderSearchCriteria criteria, Pageable pageable) {
+        if (criteria.getOrderId() != null) {
+            Optional<Order> orderOpt = orderRepository.findById(criteria.getOrderId());
+
+            if (orderOpt.isPresent() && orderOpt.get().getStatus() != Status.IN_CART) {
+                OrderDto dto = modelMapper.map(orderOpt.get(), OrderDto.class);
+                return new org.springframework.data.domain.PageImpl<>(List.of(dto), pageable, 1);
+            } else {
+                return org.springframework.data.domain.Page.empty(pageable);
+            }
+        } else if (criteria.getEmail() != null && !criteria.getEmail().isBlank()) {
+            Page<Order> orders = orderRepository.searchByEmail(
+                    criteria.getEmail(),
+                    Status.IN_CART,
+                    pageable
+            );
+            return orders.map(order -> modelMapper.map(order, OrderDto.class));
+        } else {
+            Page<Order> orders = orderRepository.findAllByStatusNot(Status.IN_CART, pageable);
+            return orders.map(order -> modelMapper.map(order, OrderDto.class));
+        }
     }
 }
