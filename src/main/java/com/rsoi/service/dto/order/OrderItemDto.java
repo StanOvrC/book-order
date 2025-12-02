@@ -10,5 +10,5 @@ public class OrderItemDto {
     private Long bookId;
     private String bookTitle;
     private Integer quantity;
-    private BigDecimal priceAtOrder;
+    private BigDecimal price;
 }
