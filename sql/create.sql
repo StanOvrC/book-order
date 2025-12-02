@@ -25,7 +25,8 @@ CREATE TABLE books (
     publication_year DATE,
     stock INTEGER DEFAULT 0 CHECK (stock >= 0) NOT NULL,
     image_path VARCHAR(512),
-    description TEXT
+    description TEXT,
+    is_deleted BOOLEAN DEFAULT FALSE
 );
 
 CREATE INDEX idx_book_isbn ON books(isbn);
