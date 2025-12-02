@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <html>
 <head>
     <title>Каталог книг</title>
@@ -44,6 +43,12 @@
 
     <hr/>
 
+<c:if test="${pageContext.request.isUserInRole('ADMIN')}">
+    <div style="margin-bottom: 15px;">
+        <a href="/admin/books/new" class="btn" style="background-color: green;">+ Добавить новую книгу</a>
+    </div>
+</c:if>
+
     <div class="books">
         <c:forEach var="book" items="${books.content}">
             <div class="book-card">
@@ -68,6 +73,17 @@
                     <input type="hidden" name="quantity" value="1">
                     <button class="btn">Добавить в корзину</button>
                 </form>
+                <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
+                        <hr style="margin: 5px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <a href="/admin/books/${book.id}/edit" style="font-size: 12px; color: blue;">Ред.</a>
+
+                            <form action="/admin/books/${book.id}/delete" method="post" style="display:inline;" onsubmit="return confirm('Удалить?');">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                                <button type="submit" style="background:none; border:none; color:red; font-size:12px; cursor:pointer;">Удл.</button>
+                            </form>
+                        </div>
+                </c:if>
             </div>
         </c:forEach>
     </div>

@@ -8,6 +8,11 @@
         </c:if>
 
         <c:if test="${not empty pageContext.request.userPrincipal}">
+
+        <c:if test="${pageContext.request.isUserInRole('ADMIN')}">
+                <a href="/admin/orders" style="color: darkred; font-weight: bold; margin-right: 10px;">[ADMIN] Заказы</a>
+        </c:if>
+
             <a href="/users/profile">Личный кабинет</a>
 
             <a href="/cart">Корзина</a>
