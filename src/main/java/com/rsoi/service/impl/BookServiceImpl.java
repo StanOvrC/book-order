@@ -31,7 +31,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<BookDto> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable)
+        return bookRepository.findAllByIsDeletedFalse(pageable)
                 .map(book -> modelMapper.map(book, BookDto.class));
     }
 
@@ -66,10 +66,17 @@ public class BookServiceImpl implements BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
 
-        modelMapper.map(updateDto, book);
+        book.setTitle(updateDto.getTitle());
+        book.setAuthor(updateDto.getAuthor());
+        book.setIsbn(updateDto.getIsbn());
+        book.setPageCount(updateDto.getPageCount());
+        book.setPrice(updateDto.getPrice());
+        book.setPublicationYear(updateDto.getPublicationYear());
+        book.setStock(updateDto.getStock());
 
-        Set<Genre> genres = genreService.findByIds(updateDto.getGenreIds());
-        book.setGenres(genres);
+        Set<Genre> newGenres = genreService.findByIds(updateDto.getGenreIds());
+        book.getGenres().clear();
+        book.getGenres().addAll(newGenres);
 
         Book updatedBook = bookRepository.save(book);
         return modelMapper.map(updatedBook, BookDto.class);
@@ -78,10 +85,13 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void deleteBook(Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Book not found with id: " + id);
-        }
-        bookRepository.deleteById(id);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with id: " + id));
+
+        book.setDeleted(true);
+        book.setStock(0);
+
+        bookRepository.save(book);
     }
 
     @Override
@@ -113,7 +123,7 @@ public class BookServiceImpl implements BookService {
                     .map(book -> modelMapper.map(book, BookDto.class));
         }
 
-        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCaseAndIsDeletedFalse(
                         query, query, pageable)
                 .map(book -> modelMapper.map(book, BookDto.class));
     }
@@ -124,7 +134,7 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Genre ID cannot be null");
         }
 
-        return bookRepository.findByGenres_Id(genreId, pageable)
+        return bookRepository.findByGenres_IdAndIsDeletedFalse(genreId, pageable)
                 .map(book -> modelMapper.map(book, BookDto.class));
     }
 }

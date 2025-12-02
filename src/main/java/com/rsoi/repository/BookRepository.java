@@ -6,7 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
-    Page<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String title, String author, Pageable pageable);
+    Page<Book> findAllByIsDeletedFalse(Pageable pageable);
 
-    Page<Book> findByGenres_Id(Long genreId, Pageable pageable);
+    Page<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCaseAndIsDeletedFalse(
+            String title, String author, Pageable pageable);
+
+    boolean existsByIdAndIsDeletedFalse(Long id);
+
+    Page<Book> findByGenres_IdAndIsDeletedFalse(Long genreId, Pageable pageable);
 }

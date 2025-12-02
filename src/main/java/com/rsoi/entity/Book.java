@@ -50,4 +50,7 @@ public class Book {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
 }
