@@ -38,4 +38,6 @@ public class BookCreateUpdateDto {
     private Set<Long> genreIds;
 
     private MultipartFile image;
+
+    private String description;
 }

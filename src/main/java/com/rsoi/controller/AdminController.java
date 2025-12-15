@@ -67,6 +67,7 @@ public class AdminController {
         dto.setPrice(book.getPrice());
         dto.setPublicationYear(book.getPublicationYear());
         dto.setStock(book.getStock());
+        dto.setDescription(book.getDescription());
 
         dto.setGenreIds(
                 book.getGenres()

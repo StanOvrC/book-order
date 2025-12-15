@@ -1,7 +1,7 @@
 INSERT INTO users (first_name, last_name, password, role, birthdate, email) VALUES
 ('Иван', 'Иванов', 'hashed_user_pass', 'USER', '1995-05-15', 'ivan@example.com'),
 ('Анна', 'Смирнова', 'hashed_admin_pass', 'ADMIN', '1988-11-20', 'anna@example.com'),
-('Петр', 'Сидоров', 'hashed_manager_pass', 'MANAGER', '2001-01-01', 'petr@example.com');
+('Петр', 'Сидоров', 'hashed_user_pass', 'USER', '2001-01-01', 'petr@example.com');
 
 
 

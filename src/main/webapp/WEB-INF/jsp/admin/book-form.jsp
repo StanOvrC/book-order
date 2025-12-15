@@ -57,6 +57,13 @@
                             <form:input path="isbn" cssClass="form-control" required="true"/>
                             <form:errors path="isbn" cssClass="text-danger small"/>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Описание книги</label>
+                            <form:textarea path="description" cssClass="form-control" rows="5" placeholder="Введите краткое содержание или описание книги..."/>
+                            <form:errors path="description" cssClass="text-danger small"/>
+                        </div>
+                        <div class="row">
+                        <div class="col-md-6 mb-3">
 
                         <div class="row">
                             <div class="col-md-6 mb-3">

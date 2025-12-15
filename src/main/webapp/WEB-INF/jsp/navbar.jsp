@@ -53,7 +53,6 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/users/profile">Мой профиль</a></li>
-                            <li><a class="dropdown-item" href="/users/profile">Мои заказы</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form action="/logout" method="post" class="px-2 py-1">
